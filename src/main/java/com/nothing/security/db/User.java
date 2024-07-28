@@ -22,6 +22,16 @@ public class User {
 	
 	private String userName;
 	
+	private String firstName;
+	
+	private String lastName;
+	
+	private String otherNames;
+	
+	private String nationalId;
+	
+	private String fullName;
+	
 	private String emailAddress;
 	
 	private String mobileNumber;

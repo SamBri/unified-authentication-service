@@ -29,6 +29,9 @@ public class ResourceAuthRequestDto {
 	
 	private String mobileNumber;
 	
+	
+	private String nationalId;
+	
 	private String password;
 	
 	private String otp;

@@ -13,6 +13,7 @@ import com.nothing.security.dto.UserDto;
 import com.nothing.security.response.ResourceAuthResponse;
 import com.nothing.security.response.RootResponse;
 import com.nothing.security.service.ResourceAuthenticationServiceImpl;
+import com.nothing.security.utils.oauth2server.OAuth2ServerResponse;
 
 @RequestMapping("/resource-authentication")
 @RestController
@@ -33,6 +34,11 @@ public class ResourceAuthenticationController {
 	@PostMapping("/user-token")
 	public ResponseEntity<RootResponse<ResourceAuthResponse>> getAccessToken(
 			@RequestBody ResourceAuthRequestDto requestDto) {
+		
+		
+		User theUser = new User();
+		OAuth2ServerResponse oauth2ServerResponse = resourceAuthenticationService.createOauth2JwtToken(theUser);
+		
 
 		return null;
 
