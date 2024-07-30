@@ -32,10 +32,11 @@ public class ResourceAuthenticationServiceImpl implements ResourceAuthentication
 	@Override
 	public User createUser(UserDto requestDto) throws UserCreationException {
 
-		User theCreatedUser = null;
+		User theCreatedUser = new User();
 		theCreatedUser.setEmailAddress(requestDto.getEmailAddress());
 		theCreatedUser.setFirstName(requestDto.getFirstName());
 		theCreatedUser.setLastName(requestDto.getLastName());
+		theCreatedUser.setOtherNames(requestDto.getOtherNames());
 		theCreatedUser.setFullName((requestDto.getOtherNames() != null && !requestDto.getOtherNames().isEmpty())
 				? requestDto.getFirstName().concat(" ").concat(requestDto.getOtherNames()).concat(" ")
 						.concat(requestDto.getLastName())

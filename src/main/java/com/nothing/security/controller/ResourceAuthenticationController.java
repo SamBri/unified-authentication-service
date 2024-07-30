@@ -1,13 +1,17 @@
 package com.nothing.security.controller;
 
+import java.time.OffsetDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nothing.security.db.User;
 import com.nothing.security.dto.ResourceAuthRequestDto;
 import com.nothing.security.dto.UserDto;
@@ -29,6 +33,18 @@ public class ResourceAuthenticationController {
 	@Autowired
 	ResourceAuthenticationService resourceAuthenticationService;
 
+	@GetMapping("/ping")
+	String ping() {
+		return OffsetDateTime.now().toString();
+	}
+
+	@PostMapping("/ping")
+	String ping(@RequestBody String in) {
+		String out = in;
+		
+		return "out:".concat(in).concat(",").concat("timestamp:").concat(OffsetDateTime.now().toString());
+	}
+
 	@PostMapping("/users")
 	ResponseEntity<RootResponse<User>> createUser(@RequestBody UserDto requestDto) throws UserCreationException {
 
@@ -40,6 +56,7 @@ public class ResourceAuthenticationController {
 		apiResponse.setMessage("user was successfully created!");
 		apiResponse.setStatus("success");
 		apiResponse.setResponse(theCreatedUser);
+		apiResponse.setTimeStamp(OffsetDateTime.now());
 		return new ResponseEntity<RootResponse<User>>(apiResponse, HttpStatus.CREATED);
 	}
 
@@ -50,7 +67,7 @@ public class ResourceAuthenticationController {
 
 		User theUser = null;
 
-		RootResponse<ResourceAuthResponse> apiResponse = null; 
+		RootResponse<ResourceAuthResponse> apiResponse = null;
 
 		// userId && password authentication block
 		if ((requestDto.getUserId() != null && requestDto.getUserId().isEmpty())
@@ -69,7 +86,7 @@ public class ResourceAuthenticationController {
 
 				OAuth2ServerResponse oauth2ServerResponse = resourceAuthenticationService.createOauth2JwtToken(theUser);
 
-				apiResponse=new RootResponse<>();
+				apiResponse = new RootResponse<>();
 				ResourceAuthResponse resourceAuthResponse = new ResourceAuthResponse();
 				resourceAuthResponse.setAccessToken(oauth2ServerResponse.getAccessToken());
 				resourceAuthResponse.setExpiresAt(oauth2ServerResponse.getExpiresAt().toString());
@@ -80,11 +97,10 @@ public class ResourceAuthenticationController {
 			}
 
 		} else {
-			throw new UnsupportedOperationException("generation of user access token fails for authentication operation");
+			throw new UnsupportedOperationException(
+					"generation of user access token fails for authentication operation");
 		}
-		
 
-		
 		return new ResponseEntity<RootResponse<ResourceAuthResponse>>(apiResponse, HttpStatus.OK);
 
 	}
