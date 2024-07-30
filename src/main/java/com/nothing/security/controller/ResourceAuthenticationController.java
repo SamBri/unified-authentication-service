@@ -11,6 +11,7 @@ import com.nothing.security.db.User;
 import com.nothing.security.dto.ResourceAuthRequestDto;
 import com.nothing.security.dto.UserDto;
 import com.nothing.security.exceptions.IncorrectUserPasswordException;
+import com.nothing.security.exceptions.UserCreationException;
 import com.nothing.security.exceptions.UserNotFoundException;
 import com.nothing.security.response.ResourceAuthResponse;
 import com.nothing.security.response.RootResponse;
@@ -28,7 +29,7 @@ public class ResourceAuthenticationController {
 	ResourceAuthenticationService resourceAuthenticationService;
 
 	@PostMapping("/users")
-	ResponseEntity<RootResponse<User>> createUser(@RequestBody UserDto requestDto) {
+	ResponseEntity<RootResponse<User>> createUser(@RequestBody UserDto requestDto) throws UserCreationException {
 
 		User theCreatedUser = resourceAuthenticationService.createUser(requestDto);
 
@@ -38,7 +39,8 @@ public class ResourceAuthenticationController {
 
 	@PostMapping("/user-token")
 	public ResponseEntity<RootResponse<ResourceAuthResponse>> getAccessToken(
-			@RequestBody ResourceAuthRequestDto requestDto) throws UserNotFoundException, IncorrectUserPasswordException {
+			@RequestBody ResourceAuthRequestDto requestDto)
+			throws UserNotFoundException, IncorrectUserPasswordException {
 
 		User theUser = null;
 
@@ -53,16 +55,15 @@ public class ResourceAuthenticationController {
 
 			// confirm the user password
 			if (!theUser.getPassword().equals(password)) {
-                  
+
 				throw new IncorrectUserPasswordException("incorrect user password entered");
 			} else {
-				
+
 				OAuth2ServerResponse oauth2ServerResponse = resourceAuthenticationService.createOauth2JwtToken(theUser);
 
 			}
 
-		} 
-		
+		}
 
 		return null;
 
