@@ -30,11 +30,28 @@ public class UnifiedAuthenticationServiceExceptionService {
 		
 		RootResponse<String> exceptionResponse = new RootResponse<>();
 		
-		exceptionResponse.setCode(HttpStatus.EXPECTATION_FAILED.value());
+		exceptionResponse.setCode(100);
 		exceptionResponse.setMessage(e.getMessage());
 		exceptionResponse.setStatus("error");
 		exceptionResponse.setResponse(null);
-		return new ResponseEntity<RootResponse<String>>(exceptionResponse,HttpStatus.NOT_ACCEPTABLE);
+		return new ResponseEntity<RootResponse<String>>(exceptionResponse,HttpStatus.EXPECTATION_FAILED);
+	}
+	
+	
+	@ExceptionHandler(UnsupportedOperationException.class)
+	public ResponseEntity<RootResponse<String>> handleUserCreationExceptionEvent(UnsupportedOperationException  e){
+		
+		log.info("@@  handleUserCreationExceptionEvents handler");
+		
+		log.error("UserCreationException",e);
+		
+		RootResponse<String> exceptionResponse = new RootResponse<>();
+		
+		exceptionResponse.setCode(103);
+		exceptionResponse.setMessage(e.getMessage());
+		exceptionResponse.setStatus("error");
+		exceptionResponse.setResponse(null);
+		return new ResponseEntity<RootResponse<String>>(exceptionResponse,HttpStatus.EXPECTATION_FAILED);
 	}
 	
 	
@@ -47,11 +64,11 @@ public class UnifiedAuthenticationServiceExceptionService {
 		
 		RootResponse<String> exceptionResponse = new RootResponse<>();
 		
-		exceptionResponse.setCode(HttpStatus.EXPECTATION_FAILED.value());
+		exceptionResponse.setCode(HttpStatus.NOT_FOUND.value());
 		exceptionResponse.setMessage(e.getMessage());
 		exceptionResponse.setStatus("error");
 		exceptionResponse.setResponse(null);
-		return new ResponseEntity<RootResponse<String>>(exceptionResponse,HttpStatus.NOT_ACCEPTABLE);
+		return new ResponseEntity<RootResponse<String>>(exceptionResponse,HttpStatus.EXPECTATION_FAILED);
 	}
 	
 	
@@ -65,11 +82,11 @@ public class UnifiedAuthenticationServiceExceptionService {
 		
 		RootResponse<String> exceptionResponse = new RootResponse<>();
 		
-		exceptionResponse.setCode(HttpStatus.EXPECTATION_FAILED.value());
+		exceptionResponse.setCode(101);
 		exceptionResponse.setMessage(e.getMessage());
 		exceptionResponse.setStatus("error");
 		exceptionResponse.setResponse(null);
-		return new ResponseEntity<RootResponse<String>>(exceptionResponse,HttpStatus.NOT_ACCEPTABLE);
+		return new ResponseEntity<RootResponse<String>>(exceptionResponse,HttpStatus.EXPECTATION_FAILED);
 	}
 
 }

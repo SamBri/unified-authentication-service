@@ -10,9 +10,9 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.nothing</groupId>
-	<artifactId>authentication-wahala</artifactId>
+	<artifactId>unified-authentication-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>my-personal-authentication-service</name>
+	<name>unified-authentication-service</name>
 	<description>Demo project for Spring Boot</description>
 	<url />
 	<licenses>
@@ -48,10 +48,10 @@
 		</dependency>
 
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.springframework.boot</groupId> -->
+<!-- 			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId> -->
+<!-- 		</dependency> -->
 
 
 		<!-- <dependency> -->
@@ -112,6 +112,10 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
 		</dependency>
 	</dependencies>
 	<!-- <dependencyManagement> -->
