@@ -1,12 +1,44 @@
 package com.nothing.security.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.nothing.security.db.User;
 import com.nothing.security.dto.UserDto;
+import com.nothing.security.repository.ResourceRequestListRepository;
+import com.nothing.security.repository.UserRepository;
+import com.nothing.security.utils.oauth2server.OAuth2Server;
 import com.nothing.security.utils.oauth2server.OAuth2ServerResponse;
 
-public interface ResourceAuthenticationServiceImpl {
+@Service
+public class ResourceAuthenticationServiceImpl implements ResourceAuthenticationService {
+
+	@Autowired
+	ResourceRequestListRepository requestListRepository;
+
+	@Autowired
+	UserRepository userRepository;
 	
-	User createUser(UserDto requestDto);
+
+	@Override
+	public User createUser(UserDto requestDto) {
+
+		User tempUser = new User();
+
+		userRepository.save(tempUser);
+
+		return null;
+	}
+
+	@Override
+	public OAuth2ServerResponse createOauth2JwtToken(User userDetails) {
+
+		
+	  OAuth2ServerResponse oauth2ServerResponse =	OAuth2Server.createJwt(userDetails);
+		
+		return oauth2ServerResponse;
+	}
 	
-	OAuth2ServerResponse createOauth2JwtToken(User userDetails);
+	
+
 }

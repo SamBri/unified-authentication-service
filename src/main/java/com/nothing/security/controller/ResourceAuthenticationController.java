@@ -12,15 +12,18 @@ import com.nothing.security.dto.ResourceAuthRequestDto;
 import com.nothing.security.dto.UserDto;
 import com.nothing.security.response.ResourceAuthResponse;
 import com.nothing.security.response.RootResponse;
-import com.nothing.security.service.ResourceAuthenticationServiceImpl;
+import com.nothing.security.service.ResourceAuthenticationService;
 import com.nothing.security.utils.oauth2server.OAuth2ServerResponse;
+
+import lombok.extern.slf4j.Slf4j;
 
 @RequestMapping("/resource-authentication")
 @RestController
+@Slf4j
 public class ResourceAuthenticationController {
 
 	@Autowired
-	ResourceAuthenticationServiceImpl resourceAuthenticationService;
+	ResourceAuthenticationService resourceAuthenticationService;
 
 	@PostMapping("/users")
 	ResponseEntity<RootResponse<User>> createUser(@RequestBody UserDto requestDto) {
