@@ -2,6 +2,8 @@ package com.nothing.security.dto;
 
 import java.util.UUID;
 
+import com.nothing.security.db.Resource;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,11 +19,6 @@ public class ResourceAuthRequestDto {
 
 	private String userId;
 
-	private String resourceType;
-
-	private String resourceName;
-
-	private String resourceCode;
 	
 	private String userName;
 	
@@ -35,6 +32,8 @@ public class ResourceAuthRequestDto {
 	private String password;
 	
 	private String otp;
+	
+	private ResourceDto resource;
 	
 
 }

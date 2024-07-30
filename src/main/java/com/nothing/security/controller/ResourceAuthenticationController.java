@@ -1,6 +1,8 @@
 package com.nothing.security.controller;
 
+import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,11 +13,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.hash.Hashing;
+import com.nothing.security.db.Resource;
 import com.nothing.security.db.User;
 import com.nothing.security.dto.ResourceAuthRequestDto;
 import com.nothing.security.dto.UserDto;
 import com.nothing.security.exceptions.IncorrectUserPasswordException;
+import com.nothing.security.exceptions.OAuth2TokenCreationException;
 import com.nothing.security.exceptions.UserCreationException;
 import com.nothing.security.exceptions.UserNotFoundException;
 import com.nothing.security.response.ResourceAuthResponse;
@@ -38,10 +42,11 @@ public class ResourceAuthenticationController {
 		return OffsetDateTime.now().toString();
 	}
 
+	// confirm crsf test
 	@PostMapping("/ping")
 	String ping(@RequestBody String in) {
 		String out = in;
-		
+
 		return "out:".concat(in).concat(",").concat("timestamp:").concat(OffsetDateTime.now().toString());
 	}
 
@@ -63,37 +68,64 @@ public class ResourceAuthenticationController {
 	@PostMapping("/user-token")
 	public ResponseEntity<RootResponse<ResourceAuthResponse>> getAccessToken(
 			@RequestBody ResourceAuthRequestDto requestDto)
-			throws UserNotFoundException, IncorrectUserPasswordException {
+			throws UserNotFoundException, IncorrectUserPasswordException, OAuth2TokenCreationException {
 
 		User theUser = null;
 
 		RootResponse<ResourceAuthResponse> apiResponse = null;
 
 		// userId && password authentication block
-		if ((requestDto.getUserId() != null && requestDto.getUserId().isEmpty())
-				&& (requestDto.getPassword() != null && requestDto.getPassword().isEmpty())) {
+		if ((requestDto.getUserId() != null && !requestDto.getUserId().isEmpty())
+				&& (requestDto.getPassword() != null && !requestDto.getPassword().isEmpty())) {
 			String userId = requestDto.getUserId();
-			String password = requestDto.getPassword();
+			String theEnteredPassword = requestDto.getPassword();
 
 			// confirm if user exists in the database.
 			theUser = resourceAuthenticationService.findUserByUserId(userId);
 
+			String theHashedPassword = Hashing.sha256().hashString(theEnteredPassword, StandardCharsets.UTF_8)
+					.toString();
+
 			// confirm the user password
-			if (!theUser.getPassword().equals(password)) {
+			if (!theUser.getPassword().equals(theHashedPassword)) {
 
 				throw new IncorrectUserPasswordException("incorrect user password entered");
 			} else {
 
-				OAuth2ServerResponse oauth2ServerResponse = resourceAuthenticationService.createOauth2JwtToken(theUser);
+				// generate jwt for user with a resource request
+				if (requestDto.getResource() != null) {
+					Resource theResource = requestDto.getResource();
+					OAuth2ServerResponse oauth2ServerResponse = resourceAuthenticationService
+							.createOauth2JwtToken(theUser, theResource);
 
-				apiResponse = new RootResponse<>();
-				ResourceAuthResponse resourceAuthResponse = new ResourceAuthResponse();
-				resourceAuthResponse.setAccessToken(oauth2ServerResponse.getAccessToken());
-				resourceAuthResponse.setExpiresAt(oauth2ServerResponse.getExpiresAt().toString());
-				apiResponse.setCode(200);
-				apiResponse.setMessage("user access_token was successfully generated!");
-				apiResponse.setStatus("success");
-				apiResponse.setResponse(resourceAuthResponse);
+					apiResponse = new RootResponse<>();
+					ResourceAuthResponse resourceAuthResponse = new ResourceAuthResponse();
+					resourceAuthResponse.setAccessToken(oauth2ServerResponse.getAccessToken());
+					resourceAuthResponse.setExpiresAt(oauth2ServerResponse.getExpiresAt()
+							.format(DateTimeFormatter.ofPattern("EEEE, dd MMM yyyy hh:mm:ss OOOO")));
+					apiResponse.setCode(200);
+					apiResponse.setMessage("user access_token was successfully generated!");
+					apiResponse.setStatus("success");
+					apiResponse.setResponse(resourceAuthResponse);
+					apiResponse.setTimeStamp(OffsetDateTime.now());
+				} else {
+
+					OAuth2ServerResponse oauth2ServerResponse = resourceAuthenticationService
+							.createOauth2JwtToken(theUser);
+
+					apiResponse = new RootResponse<>();
+					ResourceAuthResponse resourceAuthResponse = new ResourceAuthResponse();
+					resourceAuthResponse.setAccessToken(oauth2ServerResponse.getAccessToken());
+					resourceAuthResponse.setExpiresAt(oauth2ServerResponse.getExpiresAt()
+							.format(DateTimeFormatter.ofPattern("EEEE, dd MMM yyyy hh:mm:ss OOOO")));
+					apiResponse.setCode(200);
+					apiResponse.setMessage("user access_token was successfully generated!");
+					apiResponse.setStatus("success");
+					apiResponse.setResponse(resourceAuthResponse);
+					apiResponse.setTimeStamp(OffsetDateTime.now());
+
+				}
+
 			}
 
 		} else {

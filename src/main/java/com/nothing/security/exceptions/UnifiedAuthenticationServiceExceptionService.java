@@ -38,6 +38,23 @@ public class UnifiedAuthenticationServiceExceptionService {
 	}
 	
 	
+	@ExceptionHandler(OAuth2TokenCreationException.class)
+	public ResponseEntity<RootResponse<String>> handleOAuth2TokenCreationExceptionEvent(OAuth2TokenCreationException  e){
+		
+		log.info("@@  handleOAuth2TokenCreationExceptionEvent handler");
+		
+		log.error("OAuth2TokenCreationException",e);
+		
+		RootResponse<String> exceptionResponse = new RootResponse<>();
+		
+		exceptionResponse.setCode(-100);
+		exceptionResponse.setMessage(e.getMessage());
+		exceptionResponse.setStatus("error");
+		exceptionResponse.setResponse(null);
+		return new ResponseEntity<RootResponse<String>>(exceptionResponse,HttpStatus.EXPECTATION_FAILED);
+	}
+	
+	
 	@ExceptionHandler(UnsupportedOperationException.class)
 	public ResponseEntity<RootResponse<String>> handleUserCreationExceptionEvent(UnsupportedOperationException  e){
 		

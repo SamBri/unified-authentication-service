@@ -1,8 +1,5 @@
 package com.nothing.security.db;
 
-import java.util.UUID;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,36 +12,26 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name="resource_request_list")
+@Table(name="resources")
 @Getter
-@Setter
 @ToString
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
-public class ResourceRequestList {
+@AllArgsConstructor
+public class Resource {
+	
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	private UUID listId;
+	protected String resourceType; // mandatory
+
+	protected String resourceName; // mandatory
+
+	protected String resourceCode; // mandatory
 	
-	private String resourceId;
-	
-	private String userId;
-	
-	private String resourceType;
-	
-	private String resourceName;
-	
-	private String resourceCode;
-	
-	@Column(length = 512)
-	private String userAccessToken;
-	
-	
-	
-    
+	protected String resourceId; // mandatory
 
 
 }

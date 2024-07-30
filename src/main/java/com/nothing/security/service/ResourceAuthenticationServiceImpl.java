@@ -4,15 +4,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.google.common.hash.Hashing;
-import com.nimbusds.jose.JWSAlgorithm;
-import com.nimbusds.jose.JWSSigner;
-import com.nimbusds.jose.crypto.impl.HMAC;
+import com.nothing.security.db.Resource;
 import com.nothing.security.db.User;
 import com.nothing.security.dto.UserDto;
+import com.nothing.security.exceptions.OAuth2TokenCreationException;
 import com.nothing.security.exceptions.UserCreationException;
 import com.nothing.security.exceptions.UserNotFoundException;
 import com.nothing.security.repository.ResourceRequestListRepository;
@@ -28,6 +26,9 @@ public class ResourceAuthenticationServiceImpl implements ResourceAuthentication
 
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	OAuth2Server oauth2Server;
 
 	@Override
 	public User createUser(UserDto requestDto) throws UserCreationException {
@@ -59,14 +60,26 @@ public class ResourceAuthenticationServiceImpl implements ResourceAuthentication
 		return theCreatedUser;
 	}
 
+	
 	@Override
-	public OAuth2ServerResponse createOauth2JwtToken(User userDetails) {
+	public OAuth2ServerResponse createOauth2JwtToken(User userDetails) throws OAuth2TokenCreationException {
 
-		OAuth2ServerResponse oauth2ServerResponse = OAuth2Server.createJwt(userDetails);
+		OAuth2ServerResponse oauth2ServerResponse = oauth2Server.createJwt(userDetails);
 
 		return oauth2ServerResponse;
 	}
 
+	
+	
+	@Override
+	public OAuth2ServerResponse createOauth2JwtToken(User userDetails, Resource resourceDetails) throws OAuth2TokenCreationException {
+
+		OAuth2ServerResponse oauth2ServerResponse = oauth2Server.createJwt(userDetails,resourceDetails);
+
+		return oauth2ServerResponse;
+	}
+	
+	
 	@Override
 	public User findUserByUserId(String userId) throws UserNotFoundException {
 
