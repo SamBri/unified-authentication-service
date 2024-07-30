@@ -15,5 +15,7 @@ public class ResourceAuthResponse {
 	
 	private String accessToken;
 	
+	private String expiresAt;
+	
 
 }

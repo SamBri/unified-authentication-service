@@ -1,10 +1,12 @@
 package com.nothing.security.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.nothing.security.db.User;
 import com.nothing.security.dto.UserDto;
+import com.nothing.security.exceptions.UserNotFoundException;
 import com.nothing.security.repository.ResourceRequestListRepository;
 import com.nothing.security.repository.UserRepository;
 import com.nothing.security.utils.oauth2server.OAuth2Server;
@@ -37,6 +39,20 @@ public class ResourceAuthenticationServiceImpl implements ResourceAuthentication
 	  OAuth2ServerResponse oauth2ServerResponse =	OAuth2Server.createJwt(userDetails);
 		
 		return oauth2ServerResponse;
+	}
+
+	@Override
+	public User findUserByUserId(String userId) throws UserNotFoundException {
+
+	  User tempUser =	userRepository.findUserByUserId(userId);
+	  
+	  if(tempUser == null) {
+		  throw new UserNotFoundException();
+	  }
+	  
+	  
+	  
+		return tempUser;
 	}
 	
 	

@@ -15,7 +15,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class ResourceAuthRequestDto {
 
-	private UUID userId;
+	private String userId;
 
 	private String resourceType;
 

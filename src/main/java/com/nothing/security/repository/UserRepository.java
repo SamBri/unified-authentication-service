@@ -8,5 +8,8 @@ import com.nothing.security.db.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+	
+	
+	User findUserByUserId(String userId);
 
 }

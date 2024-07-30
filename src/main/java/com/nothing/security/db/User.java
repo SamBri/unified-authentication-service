@@ -18,7 +18,9 @@ public class User {
 	
 	private Long id;
 	
-	private UUID userId;
+	private String userId;
+	
+	private String userRefNo;
 	
 	private String userName;
 	
