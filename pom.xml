@@ -13,7 +13,7 @@
 	<artifactId>unified-authentication-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>unified-authentication-service</name>
-	<description>Demo project for Spring Boot</description>
+	<description>This service generates jwt tokens for a resource request</description>
 	<url />
 	<licenses>
 		<license />

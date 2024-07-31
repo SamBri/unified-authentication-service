@@ -38,7 +38,8 @@ public class OAuth2Server {
 
 			OffsetDateTime now = OffsetDateTime.now();
 			OffsetDateTime issuedAt = now;
-			OffsetDateTime expiresAt = now.plusSeconds(60);
+			OffsetDateTime expiresAt = now.plusSeconds(360);
+			log.info("expiresAt :"+ expiresAt.toString());
 			claimsSet.put("sub", "user_jwt_request".toUpperCase());
 			claimsSet.put("iss", "UNIFIED_AUTHENTICATION_SERVICE_OAUTH2SERVER");
 			claimsSet.put("exp", expiresAt.toEpochSecond());
@@ -96,7 +97,8 @@ public class OAuth2Server {
 
 			OffsetDateTime now = OffsetDateTime.now();
 			OffsetDateTime issuedAt = now;
-			OffsetDateTime expiresAt = now.plusSeconds(60);
+			OffsetDateTime expiresAt = now.plusSeconds(360);
+			log.info("expiresAt :"+ expiresAt.toString());
 			claimsSet.put("sub", "resource_access_jwt_request".toUpperCase());
 			claimsSet.put("iss", "UNIFIED_AUTHENTICATION_SERVICE_OAUTH2SERVER");
 			claimsSet.put("exp", expiresAt.toEpochSecond());

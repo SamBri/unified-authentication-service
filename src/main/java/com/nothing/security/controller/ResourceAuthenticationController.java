@@ -102,7 +102,7 @@ public class ResourceAuthenticationController {
 					ResourceAuthResponse resourceAuthResponse = new ResourceAuthResponse();
 					resourceAuthResponse.setAccessToken(oauth2ServerResponse.getAccessToken());
 					resourceAuthResponse.setExpiresAt(oauth2ServerResponse.getExpiresAt()
-							.format(DateTimeFormatter.ofPattern("EEEE, dd MMM yyyy hh:mm:ss OOOO")));
+							.format(DateTimeFormatter.ofPattern("EEEE, dd MMM yyyy HH:mm:ss  OOOO")));
 					apiResponse.setCode(200);
 					apiResponse.setMessage("user access_token was successfully generated!");
 					apiResponse.setStatus("success");
