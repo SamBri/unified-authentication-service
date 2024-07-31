@@ -13,7 +13,7 @@
 	<artifactId>unified-authentication-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>unified-authentication-service</name>
-	<description>This service generates jwt tokens for a resource request</description>
+	<description>An authentication service for resources usage leveraging OAuth2.0 jwt access tokens</description>
 	<url />
 	<licenses>
 		<license />
